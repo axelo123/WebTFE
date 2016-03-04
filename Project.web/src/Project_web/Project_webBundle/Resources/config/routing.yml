@@ -1,0 +1,3 @@
+project.web_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: Project_webBundle:Default:index }

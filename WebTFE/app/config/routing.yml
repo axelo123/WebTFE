@@ -1,0 +1,4 @@
+web_tfe:
+    resource: "@WebTFEBundle/Resources/config/routing.yml"
+    prefix:   /webtfe
+

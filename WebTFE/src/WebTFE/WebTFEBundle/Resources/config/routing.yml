@@ -1,0 +1,3 @@
+web_tfe_homepage:
+    path:     /hello/{nom}/{prenom}
+    defaults: { _controller: WebTFEBundle:Default:index }
