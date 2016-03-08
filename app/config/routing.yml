@@ -1,0 +1,52 @@
+web_tfe_user_api:
+    resource: "@WebTFEBundle/Controller/UserRESTController.php"
+    type:   rest
+    prefix:   /api
+
+web_tfe_type_api:
+    resource: "@WebTFEBundle/Controller/TypeRESTController.php"
+    type:   rest
+    prefix:   /api
+
+web_tfe_stock.user_api:
+    resource: "@WebTFEBundle/Controller/Stock_UserRESTController.php"
+    type:   rest
+    prefix:   /api
+
+web_tfe_stock_api:
+    resource: "@WebTFEBundle/Controller/StockRESTController.php"
+    type:   rest
+    prefix:   /api
+
+web_tfe_save_operation_api:
+    resource: "@WebTFEBundle/Controller/SaveOperationRESTController.php"
+    type:   rest
+    prefix:   /api
+
+web_tfe_operation_api:
+    resource: "@WebTFEBundle/Controller/OperationRESTController.php"
+    type:   rest
+    prefix:   /api
+
+web_tfe_item_api:
+    resource: "@WebTFEBundle/Controller/ItemRESTController.php"
+    type:   rest
+    prefix:   /api
+
+web_tfe_currency_api:
+    resource: "@WebTFEBundle/Controller/CurrencyRESTController.php"
+    type:   rest
+    prefix:   /api
+
+web_tfe_barcode_api:
+    resource: "@WebTFEBundle/Controller/BarcodeRESTController.php"
+    type:   rest
+    prefix:   /api
+
+web_tfe:
+    resource: "@WebTFEBundle/Resources/config/routing.yml"
+    prefix:   /
+
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
