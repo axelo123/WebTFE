@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="WebTFEBundle\Repository\SaveOperationRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class SaveOperation
 {
@@ -180,5 +181,15 @@ class SaveOperation
     public function getArticleId()
     {
         return $this->articleId;
+    }
+
+    /**
+     * @ORM\PreFlush
+     * @return $this
+     */
+    public function createModificationDate()
+    {
+        $this->modificationDate=new \DateTime();
+        return $this;
     }
 }

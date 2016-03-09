@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="WebTFEBundle\Repository\TypeRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Type
 {
@@ -120,5 +121,25 @@ class Type
     public function getAddDate()
     {
         return $this->addDate;
+    }
+
+    /**
+     * @ORM\PreFlush
+     * @return $this
+     */
+    public function createExpireDate()
+    {
+        $this->expireDate=new \DateTime();
+        return $this;
+    }
+
+    /**
+     * @ORM\PreFlush
+     * @return $this
+     */
+    public function createAddDate()
+    {
+        $this->addDate=new \DateTime();
+        return $this;
     }
 }
