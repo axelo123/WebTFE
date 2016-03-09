@@ -12,8 +12,8 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use ApiModComBundle\Entity\User;
-use ApiModComBundle\Services\UserServices;
+use WebTFEBundle\Entity\User;
+use WebTFEBundle\Services\UserServices;
 
 class ApiAuthController extends controller
 {

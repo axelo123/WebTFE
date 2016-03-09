@@ -2,6 +2,8 @@
 
 namespace WebTFEBundle\Controller;
 
+use NamespaceCollision\A\Bar;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use WebTFEBundle\Entity\Barcode;
 use WebTFEBundle\Form\BarcodeType;
 
@@ -35,14 +37,14 @@ class BarcodeRESTController extends VoryxController
      */
     public function getAction(Barcode $entity)
     {
-        return $entity;
+        $barcode_services=$this->get('barcode.services');
+        return new JsonResponse($barcode_services->format_response($entity));
     }
     /**
      * Get all Barcode entities.
      *
      * @View(serializerEnableMaxDepthChecks=true)
      *
-     * @param ParamFetcherInterface $paramFetcher
      *
      * @return Response
      *
@@ -51,24 +53,21 @@ class BarcodeRESTController extends VoryxController
      * @QueryParam(name="order_by", nullable=true, array=true, description="Order by fields. Must be an array ie. &order_by[name]=ASC&order_by[description]=DESC")
      * @QueryParam(name="filters", nullable=true, array=true, description="Filter by fields. Must be an array ie. &filters[id]=3")
      */
-    public function cgetAction(ParamFetcherInterface $paramFetcher)
+    public function cgetAction()
     {
-        try {
-            $offset = $paramFetcher->get('offset');
-            $limit = $paramFetcher->get('limit');
-            $order_by = $paramFetcher->get('order_by');
-            $filters = !is_null($paramFetcher->get('filters')) ? $paramFetcher->get('filters') : array();
-
-            $em = $this->getDoctrine()->getManager();
-            $entities = $em->getRepository('WebTFEBundle:Barcode')->findBy($filters, $order_by, $limit, $offset);
-            if ($entities) {
-                return $entities;
+        $entities = $this->getDoctrine()->getRepository('WebTFEBundle:Barcode')->findAll();
+        $services_barcode =  $this->get('barcode.services');
+        if ($entities) {
+            $results = [];
+            foreach($entities as $e)
+            {
+                $results[] = $services_barcode->format_response($e);
             }
-
-            return FOSView::create('Not Found', Codes::HTTP_NO_CONTENT);
-        } catch (\Exception $e) {
-            return FOSView::create($e->getMessage(), Codes::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse($results);
         }
+        $jsonResponse = new JsonResponse();
+        $jsonResponse->setStatusCode(404);
+        return $jsonResponse;
     }
     /**
      * Create a Barcode entity.
@@ -83,19 +82,26 @@ class BarcodeRESTController extends VoryxController
     public function postAction(Request $request)
     {
         $entity = new Barcode();
-        $form = $this->createForm(new BarcodeType(), $entity, array("method" => $request->getMethod()));
+        $form = $this->createForm(new Barcode(), $entity, array("method" => $request->getMethod()));
         $this->removeExtraFields($request, $form);
-        $form->handleRequest($request);
+        //$form->handleRequest($request);
+        $form->submit($request->request->all());
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
 
-            return $entity;
+            $services_barcode =  $this->get('barcode.services');
+
+            $jsonResponse = new JsonResponse($services_barcode->format_response($entity));
+            $jsonResponse->setStatusCode(201);
+            return $jsonResponse;
         }
 
-        return FOSView::create(array('errors' => $form->getErrors()), Codes::HTTP_INTERNAL_SERVER_ERROR);
+        $jsonResponse = new JsonResponse();
+        $jsonResponse->setStatusCode(400);
+        return $jsonResponse;
     }
     /**
      * Update a Barcode entity.
@@ -109,22 +115,20 @@ class BarcodeRESTController extends VoryxController
      */
     public function putAction(Request $request, Barcode $entity)
     {
-        try {
-            $em = $this->getDoctrine()->getManager();
-            $request->setMethod('PATCH'); //Treat all PUTs as PATCH
-            $form = $this->createForm(new BarcodeType(), $entity, array("method" => $request->getMethod()));
-            $this->removeExtraFields($request, $form);
-            $form->handleRequest($request);
-            if ($form->isValid()) {
-                $em->flush();
+        $services_barcode =  $this->get('barcode.services');
+        $em = $this->getDoctrine()->getManager();
+        $request->setMethod('PATCH'); //Treat all PUTs as PATCH
+        $form = $this->createForm(new BarcodeType(), $entity, array("method" => $request->getMethod()));
+        $this->removeExtraFields($request, $form);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $em->flush();
 
-                return $entity;
-            }
-
-            return FOSView::create(array('errors' => $form->getErrors()), Codes::HTTP_INTERNAL_SERVER_ERROR);
-        } catch (\Exception $e) {
-            return FOSView::create($e->getMessage(), Codes::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse($services_barcode->format_response($entity));
         }
+        $jsonResponse = new JsonResponse();
+        $jsonResponse->setStatusCode(404);
+        return $jsonResponse;
     }
     /**
      * Partial Update to a Barcode entity.
@@ -152,14 +156,10 @@ class BarcodeRESTController extends VoryxController
      */
     public function deleteAction(Request $request, Barcode $entity)
     {
-        try {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($entity);
-            $em->flush();
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($entity);
+        $em->flush();
 
-            return null;
-        } catch (\Exception $e) {
-            return FOSView::create($e->getMessage(), Codes::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        return new JsonResponse(array());
     }
 }

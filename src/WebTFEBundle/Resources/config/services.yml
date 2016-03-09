@@ -1,42 +1,42 @@
 services:
-    listener.requestresponse:
-      class: ApiModComBundle\EventListener\CreditentialListener
+  listener.requestresponse:
+    class: WebTFEBundle\EventListener\CreditentialListener
+    arguments: [ @service_container ]
+    tags:
+      - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
+  user.services:
+    class: WebTFEBundle\Services\UserServices
+    arguments: [ @service_container ]
+
+  barcode.services:
+      class: WebTFEBundle\Services\BarcodeServices
       arguments: [ @service_container ]
-      tags:
-        - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
-    user.services:
-      class: WebTFEBundle\Services\UserServices
+  currency.services:
+      class: WebTFEBundle\Services\CurrencyServices
       arguments: [ @service_container ]
 
-    barcode.services:
-        class: WebTFEBundle\Services\BarcodeServices
+  item.services:
+      class: WebTFEBundle\Services\ItemServices
+      arguments: [ @service_container ]
+
+  operation.services:
+      class: WebTFEBundle\Services\OperationServices
+      arguments: [ @service_container ]
+
+  saveoperation.services:
+      class: WebTFEBundle\Services\SaveOperationServices
+      arguments: [ @service_container ]
+
+  stock_user.services:
+        class: WebTFEBundle\Services\Stock_UserServices
         arguments: [ @service_container ]
 
-    currency.services:
-        class: WebTFEBundle\Services\CurrencyServices
-        arguments: [ @service_container ]
+  stock.services:
+      class: WebTFEBundle\Services\StockServices
+      arguments: [ @service_container ]
 
-    item.services:
-        class: WebTFEBundle\Services\ItemServices
-        arguments: [ @service_container ]
-
-    operation.services:
-        class: WebTFEBundle\Services\OperationServices
-        arguments: [ @service_container ]
-
-    saveOperation.services:
-        class: WebTFEBundle\Services\SaveOperationServices
-        arguments: [ @service_container ]
-
-    stock.services:
-        class: WebTFEBundle\Services\StockServices
-        arguments: [ @service_container ]
-
-    type.services:
-        class: WebTFEBundle\Services\TypeServices
-        arguments: [ @service_container ]
-
-    stock_user.services:
-        class: WebTFEBundle\Services\Stock8_UserServices
-        arguments: [ @service_container ]
+  type.services:
+      class: WebTFEBundle\Services\TypeServices
+      arguments: [ @service_container ]

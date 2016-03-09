@@ -2,6 +2,7 @@
 
 namespace WebTFEBundle\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use WebTFEBundle\Entity\User;
 use WebTFEBundle\Form\UserType;
 
@@ -35,40 +36,33 @@ class UserRESTController extends VoryxController
      */
     public function getAction(User $entity)
     {
-        return $entity;
+        $services_user =  $this->get('user.services');
+        return new JsonResponse($services_user->format_response($entity));
     }
     /**
      * Get all User entities.
      *
      * @View(serializerEnableMaxDepthChecks=true)
      *
-     * @param ParamFetcherInterface $paramFetcher
      *
      * @return Response
      *
-     * @QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing notes.")
-     * @QueryParam(name="limit", requirements="\d+", default="20", description="How many notes to return.")
-     * @QueryParam(name="order_by", nullable=true, array=true, description="Order by fields. Must be an array ie. &order_by[name]=ASC&order_by[description]=DESC")
-     * @QueryParam(name="filters", nullable=true, array=true, description="Filter by fields. Must be an array ie. &filters[id]=3")
      */
-    public function cgetAction(ParamFetcherInterface $paramFetcher)
+    public function cgetAction()
     {
-        try {
-            $offset = $paramFetcher->get('offset');
-            $limit = $paramFetcher->get('limit');
-            $order_by = $paramFetcher->get('order_by');
-            $filters = !is_null($paramFetcher->get('filters')) ? $paramFetcher->get('filters') : array();
-
-            $em = $this->getDoctrine()->getManager();
-            $entities = $em->getRepository('WebTFEBundle:User')->findBy($filters, $order_by, $limit, $offset);
-            if ($entities) {
-                return $entities;
+        $entities = $this->getDoctrine()->getRepository('ApiModComBundle:User')->findAll();
+        $services_user=  $this->get('user.services');
+        if ($entities) {
+            $results = [];
+            foreach($entities as $e)
+            {
+                $results[] = $services_user->format_response($e);
             }
-
-            return FOSView::create('Not Found', Codes::HTTP_NO_CONTENT);
-        } catch (\Exception $e) {
-            return FOSView::create($e->getMessage(), Codes::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse($results);
         }
+        $jsonResponse = new JsonResponse();
+        $jsonResponse->setStatusCode(404);
+        return $jsonResponse;
     }
     /**
      * Create a User entity.
@@ -85,17 +79,20 @@ class UserRESTController extends VoryxController
         $entity = new User();
         $form = $this->createForm(new UserType(), $entity, array("method" => $request->getMethod()));
         $this->removeExtraFields($request, $form);
-        $form->handleRequest($request);
-
+        //$form->handleRequest($request);
+        $form->submit($request->request->all());
+        $services_user =  $this->get('user.services');
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-
-            return $entity;
+            $jsonResponse = new JsonResponse($services_user->format_response($entity));
+            $jsonResponse->setStatusCode(201);
+            return $jsonResponse;
         }
-
-        return FOSView::create(array('errors' => $form->getErrors()), Codes::HTTP_INTERNAL_SERVER_ERROR);
+        $jsonResponse = new JsonResponse();
+        $jsonResponse->setStatusCode(400);
+        return $jsonResponse;
     }
     /**
      * Update a User entity.
@@ -109,22 +106,20 @@ class UserRESTController extends VoryxController
      */
     public function putAction(Request $request, User $entity)
     {
-        try {
-            $em = $this->getDoctrine()->getManager();
-            $request->setMethod('PATCH'); //Treat all PUTs as PATCH
-            $form = $this->createForm(new UserType(), $entity, array("method" => $request->getMethod()));
-            $this->removeExtraFields($request, $form);
-            $form->handleRequest($request);
-            if ($form->isValid()) {
-                $em->flush();
+        $services_user =  $this->get('user.services');
+        $em = $this->getDoctrine()->getManager();
+        $request->setMethod('PATCH'); //Treat all PUTs as PATCH
+        $form = $this->createForm(new UserType(), $entity, array("method" => $request->getMethod()));
+        $this->removeExtraFields($request, $form);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $em->flush();
 
-                return $entity;
-            }
-
-            return FOSView::create(array('errors' => $form->getErrors()), Codes::HTTP_INTERNAL_SERVER_ERROR);
-        } catch (\Exception $e) {
-            return FOSView::create($e->getMessage(), Codes::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse($services_user->format_response($entity));
         }
+        $jsonResponse = new JsonResponse();
+        $jsonResponse->setStatusCode(404);
+        return $jsonResponse;
     }
     /**
      * Partial Update to a User entity.
@@ -152,14 +147,10 @@ class UserRESTController extends VoryxController
      */
     public function deleteAction(Request $request, User $entity)
     {
-        try {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($entity);
-            $em->flush();
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($entity);
+        $em->flush();
 
-            return null;
-        } catch (\Exception $e) {
-            return FOSView::create($e->getMessage(), Codes::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        return new JsonResponse(array());
     }
 }

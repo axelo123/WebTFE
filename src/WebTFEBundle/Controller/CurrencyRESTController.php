@@ -2,6 +2,7 @@
 
 namespace WebTFEBundle\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use WebTFEBundle\Entity\Currency;
 use WebTFEBundle\Form\CurrencyType;
 
@@ -35,7 +36,8 @@ class CurrencyRESTController extends VoryxController
      */
     public function getAction(Currency $entity)
     {
-        return $entity;
+        $services_currency =  $this->get('currency.services');
+        return new JsonResponse($services_currency->format_response($entity));
     }
     /**
      * Get all Currency entities.
@@ -53,22 +55,19 @@ class CurrencyRESTController extends VoryxController
      */
     public function cgetAction(ParamFetcherInterface $paramFetcher)
     {
-        try {
-            $offset = $paramFetcher->get('offset');
-            $limit = $paramFetcher->get('limit');
-            $order_by = $paramFetcher->get('order_by');
-            $filters = !is_null($paramFetcher->get('filters')) ? $paramFetcher->get('filters') : array();
-
-            $em = $this->getDoctrine()->getManager();
-            $entities = $em->getRepository('WebTFEBundle:Currency')->findBy($filters, $order_by, $limit, $offset);
-            if ($entities) {
-                return $entities;
+        $entities = $this->getDoctrine()->getRepository('WebTFEBundle:Currency')->findAll();
+        $services_currency =  $this->get('currency.services');
+        if ($entities) {
+            $results = [];
+            foreach($entities as $e)
+            {
+                $results[] = $services_currency->format_response($e);
             }
-
-            return FOSView::create('Not Found', Codes::HTTP_NO_CONTENT);
-        } catch (\Exception $e) {
-            return FOSView::create($e->getMessage(), Codes::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse($results);
         }
+        $jsonResponse = new JsonResponse();
+        $jsonResponse->setStatusCode(404);
+        return $jsonResponse;
     }
     /**
      * Create a Currency entity.
@@ -85,17 +84,24 @@ class CurrencyRESTController extends VoryxController
         $entity = new Currency();
         $form = $this->createForm(new CurrencyType(), $entity, array("method" => $request->getMethod()));
         $this->removeExtraFields($request, $form);
-        $form->handleRequest($request);
+        //$form->handleRequest($request);
+        $form->submit($request->request->all());
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
 
-            return $entity;
+            $services_currency =  $this->get('currency.services');
+
+            $jsonResponse = new JsonResponse($services_currency->format_response($entity));
+            $jsonResponse->setStatusCode(201);
+            return $jsonResponse;
         }
 
-        return FOSView::create(array('errors' => $form->getErrors()), Codes::HTTP_INTERNAL_SERVER_ERROR);
+        $jsonResponse = new JsonResponse();
+        $jsonResponse->setStatusCode(400);
+        return $jsonResponse;
     }
     /**
      * Update a Currency entity.
@@ -109,22 +115,20 @@ class CurrencyRESTController extends VoryxController
      */
     public function putAction(Request $request, Currency $entity)
     {
-        try {
-            $em = $this->getDoctrine()->getManager();
-            $request->setMethod('PATCH'); //Treat all PUTs as PATCH
-            $form = $this->createForm(new CurrencyType(), $entity, array("method" => $request->getMethod()));
-            $this->removeExtraFields($request, $form);
-            $form->handleRequest($request);
-            if ($form->isValid()) {
-                $em->flush();
+        $services_currency =  $this->get('currency.services');
+        $em = $this->getDoctrine()->getManager();
+        $request->setMethod('PATCH'); //Treat all PUTs as PATCH
+        $form = $this->createForm(new Currency(), $entity, array("method" => $request->getMethod()));
+        $this->removeExtraFields($request, $form);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $em->flush();
 
-                return $entity;
-            }
-
-            return FOSView::create(array('errors' => $form->getErrors()), Codes::HTTP_INTERNAL_SERVER_ERROR);
-        } catch (\Exception $e) {
-            return FOSView::create($e->getMessage(), Codes::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse($services_currency->format_response($entity));
         }
+        $jsonResponse = new JsonResponse();
+        $jsonResponse->setStatusCode(404);
+        return $jsonResponse;
     }
     /**
      * Partial Update to a Currency entity.
@@ -152,14 +156,10 @@ class CurrencyRESTController extends VoryxController
      */
     public function deleteAction(Request $request, Currency $entity)
     {
-        try {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($entity);
-            $em->flush();
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($entity);
+        $em->flush();
 
-            return null;
-        } catch (\Exception $e) {
-            return FOSView::create($e->getMessage(), Codes::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        return new JsonResponse(array());
     }
 }

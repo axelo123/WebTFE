@@ -1,21 +1,21 @@
-api_mod_com_homepage:
+webtfe_homepage:
     path:     /hello/{id}
     defaults: { _controller: WebTFEBundle:Default:index }
 
-api_mod_com_login:
+webtfe_login:
     path:   /login
     methods: GET
     defaults: { _controller: WebTFEBundle:ApiAuth:login }
 
-api_mod_com_logout:
+webtfe_logout:
     path:   /logout
     methods: GET
     defaults: { _controller: WebTFEBundle:ApiAuth:logout }
 
-api_mod_com_api:
+webtfe_api:
     path: /api
     defaults: { _controller: WebTFEBundle:ApiAuth:index }
 
-api_mod_com_admin:
+webtfe_admin:
     path: /admin
     defaults: { _controller: WebTFEBundle:ApiAuth:admin }
