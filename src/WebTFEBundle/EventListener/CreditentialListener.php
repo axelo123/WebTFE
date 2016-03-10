@@ -32,7 +32,7 @@ class CreditentialListener
 
         if($token) {
 
-            $repository = $this->container->get('doctrine')->getRepository('ApiModComBundle:User');
+            $repository = $this->container->get('doctrine')->getRepository('WebTFEBundle:User');
 
             $user = $repository->findOneBy(array('token' => $token));
             if($user)

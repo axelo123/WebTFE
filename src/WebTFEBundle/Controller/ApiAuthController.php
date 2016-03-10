@@ -36,7 +36,7 @@ class ApiAuthController extends controller
      *
      */
 
-    public function loginAction(Request $request) {
+    public function login_checkAction(Request $request) {
         // Retrieve username and password
         $username = $request->get('username');
         $password = $request->get('password');
@@ -44,7 +44,7 @@ class ApiAuthController extends controller
         $password = sha1($password);
 
         // Verificate data in database
-        $user = $this->getDoctrine()->getRepository('ApiModComBundle:User')->findOneBy(array(
+        $user = $this->getDoctrine()->getRepository('WebTFEBundle:User')->findOneBy(array(
             'name' => $username,
             'password' => $password
         ));
@@ -87,7 +87,7 @@ class ApiAuthController extends controller
         $token = $request->headers->get('token');
         if($token)
         {
-            $user = $this->getDoctrine()->getRepository('ApiModComBundle:User')->findOneBy(array('token' => $token));
+            $user = $this->getDoctrine()->getRepository('WebTFEBundle:User')->findOneBy(array('token' => $token));
             // Delete token in db
             if($user) {
                 $token = null;
@@ -102,5 +102,10 @@ class ApiAuthController extends controller
         $jsonResponse = new JsonResponse();
         $jsonResponse->setStatusCode(403);
         return $jsonResponse;
+    }
+
+    public function loginAction(Request $request)
+    {
+        return $this->render('WebTFEBundle:Login:login-inscription.html.twig');
     }
 }

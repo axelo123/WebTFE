@@ -121,4 +121,12 @@ class User
     {
         return $this->token;
     }
+    /**
+     * @return User
+     */
+    public function createToken()
+    {
+        $this->setToken(md5($this->name.$this->password.microtime()));
+        return $this;
+    }
 }
