@@ -18,6 +18,7 @@ class Stock
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\OneToMany(targetEntity="WebTFEBundle\Entity\Add", mappedBy="stockId")
      */
     private $id;
 
@@ -29,9 +30,10 @@ class Stock
     private $name;
 
     /**
-     * @var integer
+     * @var User
      *
-     * @ORM\Column(name="user_creator_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="WebTFEBundle\Entity\User")
+     * @ORM\JoinColumn(name="userCreatorId", referencedColumnName="id")
      */
     private $userCreatorId;
 
@@ -43,9 +45,10 @@ class Stock
     private $isDelete;
 
     /**
-     * @var integer
+     * @var Barcode
      *
-     * @ORM\Column(name="barcode_id", type="integer")
+     * @ORM\OneToOne(targetEntity="WebTFEBundle\Entity\Barcode", cascade={"persist"})
+     * @ORM\JoinColumn(name="barcodeId", referencedColumnName="id")
      */
     private $barcodeId;
 
@@ -86,7 +89,7 @@ class Stock
     /**
      * Set userCreatorId
      *
-     * @param integer $userCreatorId
+     * @param User $userCreatorId
      * @return Stock
      */
     public function setUserCreatorId($userCreatorId)
@@ -99,7 +102,7 @@ class Stock
     /**
      * Get userCreatorId
      *
-     * @return integer 
+     * @return User
      */
     public function getUserCreatorId()
     {
@@ -110,7 +113,7 @@ class Stock
      * Set isDelete
      *
      * @param boolean $isDelete
-     * @return Stock
+     * @return stock
      */
     public function setIsDelete($isDelete)
     {
@@ -132,7 +135,7 @@ class Stock
     /**
      * Set barcodeId
      *
-     * @param integer $barcodeId
+     * @param Barcode $barcodeId
      * @return Stock
      */
     public function setBarcodeId($barcodeId)
@@ -145,7 +148,7 @@ class Stock
     /**
      * Get barcodeId
      *
-     * @return integer 
+     * @return Barcode
      */
     public function getBarcodeId()
     {

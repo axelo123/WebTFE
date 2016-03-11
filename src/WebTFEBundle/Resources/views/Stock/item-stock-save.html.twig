@@ -1,0 +1,53 @@
+{% extends "@WebTFE/Layout/base.html.twig" %}
+{% block head %}
+    {{ parent() }}
+    <title>Gestion de stock</title>
+    {% stylesheets '@WebTFEBundle/Resources/public/css/separator.css' %}
+        <link href="{{ asset_url }}" rel="stylesheet" type="text/css" />
+    {% endstylesheets %}
+    {% stylesheets '@WebTFEBundle/Resources/public/css/login-insrciption-adding.css' %}
+    <link href="{{ asset_url }}" rel="stylesheet" type="text/css" />
+    {% endstylesheets %}
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row" style="text-align: center;">
+                <div class="col-sm-offset-0 col-sm-3"><h3><a href="{{ path('wetfe_add') }}">Ajout</a></h3></div>
+                <div class="col-sm-6"><h1>Gestion de stock</h1></div>
+                <div class="col-sm-3"><h3><a href="{{ path('webtfe_logout') }}">Déconnection</a></h3></div>
+        </div>
+        <div class="row">
+            <div id="listeStock" class="col-sm-5">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Liste de stocks</div>
+                    <div class="panel-body">
+                        {% include "WebTFEBundle:Stock:stock-form.html.twig" %}
+                    </div>
+                </div>
+            </div>
+            <div id="separate-login-inscription" class="col-sm-2">
+                <div class="or-spacer-vertical left">
+                    <div class="mask"></div>
+                </div>
+            </div>
+            <div id="listArticle" class="col-sm-5">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Liste d'articles</div>
+                    <div class="panel-body">
+                        {% include "@WebTFE/Stock/item-form.html.twig" %}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-offset-3 col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Liste de Save</div>
+                        <div class="panel-body">
+                            {% include "@WebTFE/Stock/save-form.html.twig" %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

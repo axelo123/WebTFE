@@ -29,7 +29,6 @@ class SaveOperationServices
                 "stock_id"=>$stock_services->format_response($save_operation->getStockId()),
                 "operation_id"=>$operation_services->format_response($save_operation->getOperationId()),
                 "modification_date"=>$save_operation->getModificationDate(),
-                "user_id"=>$user_services->format_response($save_operation->getUserId()),
                 "article_id"=>$item_services->format_response($save_operation->getArticleId())
             );
         }

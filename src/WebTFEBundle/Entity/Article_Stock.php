@@ -22,16 +22,18 @@ class Article_Stock
     private $id;
 
     /**
-     * @var integer
+     * @var Item
      *
-     * @ORM\Column(name="article_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="WebTFEBundle\Entity\Stock",inversedBy="articleId")
+     * @ORM\JoinColumn(name="articleId", referencedColumnName="id")
      */
     private $articleId;
 
     /**
-     * @var integer
+     * @var Stock
      *
-     * @ORM\Column(name="stock_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="WebTFEBundle\Entity\Item",inversedBy="stockId")
+     * @ORM\JoinColumn(name="stockId", referencedColumnName="id")
      */
     private $stockId;
 
@@ -56,7 +58,7 @@ class Article_Stock
     /**
      * Set articleId
      *
-     * @param integer $articleId
+     * @param Item $articleId
      * @return Article_Stock
      */
     public function setArticleId($articleId)
@@ -69,7 +71,7 @@ class Article_Stock
     /**
      * Get articleId
      *
-     * @return integer 
+     * @return Item
      */
     public function getArticleId()
     {
@@ -79,7 +81,7 @@ class Article_Stock
     /**
      * Set stockId
      *
-     * @param integer $stockId
+     * @param Stock $stockId
      * @return Article_Stock
      */
     public function setStockId($stockId)
@@ -92,7 +94,7 @@ class Article_Stock
     /**
      * Get stockId
      *
-     * @return integer 
+     * @return Stock
      */
     public function getStockId()
     {

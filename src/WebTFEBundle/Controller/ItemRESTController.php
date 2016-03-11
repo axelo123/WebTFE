@@ -39,6 +39,11 @@ class ItemRESTController extends VoryxController
         $services_item =  $this->get('item.services');
         return new JsonResponse($services_item->format_response($entity));
     }
+
+    public function itemAction()
+    {
+        return $this->render('@WebTFE/Item/create_item-item.html.twig');
+    }
     /**
      * Get all Item entities.
      *

@@ -12,8 +12,27 @@ webtfe_login:
     methods: POST
     defaults: { _controller: WebTFEBundle:ApiAuth:login_check }
 
-
 webtfe_logout:
     path:   /logout
     methods: GET
     defaults: { _controller: WebTFEBundle:ApiAuth:logout }
+
+webtfe_inscription:
+    path:     /inscription
+    methods:  POST
+    defaults: { _controller: WebTFEBundle:ApiAuth:inscription }
+
+wetfe_stock:
+    path:     /stock
+    methods:  GET
+    defaults: { _controller: WebTFEBundle:StockREST:stock }
+
+wetfe_add:
+    path:     /item
+    methods:  GET
+    defaults: { _controller: WebTFEBundle:ApiAuth:add }
+
+wetfe_aff:
+    path:     /item
+    methods:  GET
+    defaults: { _controller: WebTFEBundle:ApiAuth:aff }

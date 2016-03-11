@@ -5,7 +5,7 @@ namespace WebTFEBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SaveOperation
+ * Add
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="WebTFEBundle\Repository\SaveOperationRepository")
@@ -23,16 +23,19 @@ class SaveOperation
     private $id;
 
     /**
-     * @var integer
+     * @var Stock
      *
-     * @ORM\Column(name="stock_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="WebTFEBundle\Entity\Stock",inversedBy="stockId")
+     * @ORM\JoinColumn(name="stockId", referencedColumnName="id")
      */
     private $stockId;
 
     /**
-     * @var integer
+     * @var Operation
      *
-     * @ORM\Column(name="operation_id", type="integer")
+     *
+     * @ORM\OneToOne(targetEntity="WebTFEBundle\Entity\Operation", cascade={"persist"})
+     * @ORM\JoinColumn(name="operationId", referencedColumnName="id")
      */
     private $operationId;
 
@@ -44,16 +47,17 @@ class SaveOperation
     private $modificationDate;
 
     /**
-     * @var integer
+     * @var User
      *
-     * @ORM\Column(name="user_id", type="integer")
      */
     private $userId;
 
     /**
-     * @var integer
+     * @var Item
      *
-     * @ORM\Column(name="article_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="WebTFEBundle\Entity\Item",inversedBy="articleId")
+     * @ORM\JoinColumn(name="articleId", referencedColumnName="id")
+     *
      */
     private $articleId;
 
@@ -71,7 +75,7 @@ class SaveOperation
     /**
      * Set stockId
      *
-     * @param integer $stockId
+     * @param Stock $stockId
      * @return SaveOperation
      */
     public function setStockId($stockId)
@@ -84,7 +88,7 @@ class SaveOperation
     /**
      * Get stockId
      *
-     * @return integer 
+     * @return Stock
      */
     public function getStockId()
     {
@@ -94,7 +98,7 @@ class SaveOperation
     /**
      * Set operationId
      *
-     * @param integer $operationId
+     * @param Operation $operationId
      * @return SaveOperation
      */
     public function setOperationId($operationId)
@@ -107,7 +111,7 @@ class SaveOperation
     /**
      * Get operationId
      *
-     * @return integer 
+     * @return Operation
      */
     public function getOperationId()
     {
@@ -140,7 +144,7 @@ class SaveOperation
     /**
      * Set userId
      *
-     * @param integer $userId
+     * @param User $userId
      * @return SaveOperation
      */
     public function setUserId($userId)
@@ -153,7 +157,7 @@ class SaveOperation
     /**
      * Get userId
      *
-     * @return integer 
+     * @return User
      */
     public function getUserId()
     {
@@ -163,7 +167,7 @@ class SaveOperation
     /**
      * Set articleId
      *
-     * @param integer $articleId
+     * @param Item $articleId
      * @return SaveOperation
      */
     public function setArticleId($articleId)
@@ -176,7 +180,7 @@ class SaveOperation
     /**
      * Get articleId
      *
-     * @return integer 
+     * @return Item
      */
     public function getArticleId()
     {
@@ -191,5 +195,59 @@ class SaveOperation
     {
         $this->modificationDate=new \DateTime();
         return $this;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->stockId = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->articleId = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add stockId
+     *
+     * @param \WebTFEBundle\Entity\Stock $stockId
+     * @return SaveOperation
+     */
+    public function addStockId(\WebTFEBundle\Entity\Stock $stockId)
+    {
+        $this->stockId[] = $stockId;
+
+        return $this;
+    }
+
+    /**
+     * Remove stockId
+     *
+     * @param \WebTFEBundle\Entity\Stock $stockId
+     */
+    public function removeStockId(\WebTFEBundle\Entity\Stock $stockId)
+    {
+        $this->stockId->removeElement($stockId);
+    }
+
+    /**
+     * Add articleId
+     *
+     * @param \WebTFEBundle\Entity\Item $articleId
+     * @return SaveOperation
+     */
+    public function addArticleId(\WebTFEBundle\Entity\Item $articleId)
+    {
+        $this->articleId[] = $articleId;
+
+        return $this;
+    }
+
+    /**
+     * Remove articleId
+     *
+     * @param \WebTFEBundle\Entity\Item $articleId
+     */
+    public function removeArticleId(\WebTFEBundle\Entity\Item $articleId)
+    {
+        $this->articleId->removeElement($articleId);
     }
 }

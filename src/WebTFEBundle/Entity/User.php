@@ -18,6 +18,7 @@ class User
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\OneToMany(targetEntity="WebTFEBundle\Entity\User", mappedBy="userCreatorId")
      */
     private $id;
 
@@ -128,5 +129,9 @@ class User
     {
         $this->setToken(md5($this->name.$this->password.microtime()));
         return $this;
+    }
+    public function __toString()
+    {
+        return (string) $this->getName();
     }
 }

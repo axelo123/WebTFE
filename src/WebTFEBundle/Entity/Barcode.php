@@ -18,6 +18,8 @@ class Barcode
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\OneToOne(targetEntity="WebTFEBundle\Entity\Stock", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="WebTFEBundle\Entity\Item", cascade={"persist"})
      */
     private $id;
 

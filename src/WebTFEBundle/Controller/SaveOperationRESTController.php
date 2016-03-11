@@ -21,13 +21,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Voryx\RESTGeneratorBundle\Controller\VoryxController;
 
 /**
- * SaveOperation controller.
- * @RouteResource("SaveOperation")
+ * Add controller.
+ * @RouteResource("Add")
  */
 class SaveOperationRESTController extends VoryxController
 {
     /**
-     * Get a SaveOperation entity
+     * Get a Add entity
      *
      * @View(serializerEnableMaxDepthChecks=true)
      *
@@ -40,7 +40,7 @@ class SaveOperationRESTController extends VoryxController
         return new JsonResponse($services_saveoperation->format_response($entity));
     }
     /**
-     * Get all SaveOperation entities.
+     * Get all Add entities.
      *
      * @View(serializerEnableMaxDepthChecks=true)
      *
@@ -50,7 +50,7 @@ class SaveOperationRESTController extends VoryxController
      */
     public function cgetAction()
     {
-        $entities = $this->getDoctrine()->getRepository('ApiModComBundle:Blacklist')->findAll();
+        $entities = $this->getDoctrine()->getRepository('WebTFEBundle:SaveOperation')->findAll();
         $services_saveoperation =  $this->get('saveoperation.services');
         if ($entities) {
             $results = [];
@@ -65,7 +65,7 @@ class SaveOperationRESTController extends VoryxController
         return $jsonResponse;
     }
     /**
-     * Create a SaveOperation entity.
+     * Create a Add entity.
      *
      * @View(statusCode=201, serializerEnableMaxDepthChecks=true)
      *
@@ -99,7 +99,7 @@ class SaveOperationRESTController extends VoryxController
         return $jsonResponse;
     }
     /**
-     * Update a SaveOperation entity.
+     * Update a Add entity.
      *
      * @View(serializerEnableMaxDepthChecks=true)
      *
@@ -126,7 +126,7 @@ class SaveOperationRESTController extends VoryxController
         return $jsonResponse;
     }
     /**
-     * Partial Update to a SaveOperation entity.
+     * Partial Update to a Add entity.
      *
      * @View(serializerEnableMaxDepthChecks=true)
      *
@@ -140,7 +140,7 @@ class SaveOperationRESTController extends VoryxController
         return $this->putAction($request, $entity);
     }
     /**
-     * Delete a SaveOperation entity.
+     * Delete a Add entity.
      *
      * @View(statusCode=204)
      *

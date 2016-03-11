@@ -64,6 +64,13 @@ class StockRESTController extends VoryxController
         $jsonResponse->setStatusCode(404);
         return $jsonResponse;
     }
+
+    public function stockAction()
+    {
+        $json=json_decode($this->cgetAction());
+        return $this->render('item-stock-save.html.twig',array('stocks'=>$json));
+
+    }
     /**
      * Create a Stock entity.
      *
@@ -157,4 +164,5 @@ class StockRESTController extends VoryxController
 
         return new JsonResponse(array());
     }
+
 }

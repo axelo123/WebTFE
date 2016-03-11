@@ -18,6 +18,7 @@ class Item
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\OneToMany(targetEntity="WebTFEBundle\Entity\Add", mappedBy="articleId")
      */
     private $id;
 
@@ -29,9 +30,10 @@ class Item
     private $name;
 
     /**
-     * @var integer
+     * @var Type
      *
-     * @ORM\Column(name="type_id", type="integer")
+     * @ORM\OneToOne(targetEntity="WebTFEBundle\Entity\Type", cascade={"persist"})
+     * @ORM\JoinColumn(name="typeId", referencedColumnName="id")
      */
     private $typeId;
 
@@ -57,9 +59,10 @@ class Item
     private $countUpdate;
 
     /**
-     * @var integer
+     * @var Currency
      *
-     * @ORM\Column(name="currency_id", type="integer")
+     * @ORM\OneToOne(targetEntity="WebTFEBundle\Entity\Currency", cascade={"persist"})
+     * @ORM\JoinColumn(name="currencyId", referencedColumnName="id")
      */
     private $currencyId;
 
@@ -78,9 +81,10 @@ class Item
     private $description;
 
     /**
-     * @var integer
+     * @var Barcode
      *
-     * @ORM\Column(name="barcode_id", type="integer")
+     * @ORM\OneToOne(targetEntity="WebTFEBundle\Entity\Barcode", cascade={"persist"})
+     * @ORM\JoinColumn(name="barcodeId", referencedColumnName="id")
      */
     private $barcodeId;
 
@@ -121,7 +125,7 @@ class Item
     /**
      * Set typeId
      *
-     * @param integer $typeId
+     * @param Type $typeId
      * @return Item
      */
     public function setTypeId($typeId)
@@ -134,7 +138,7 @@ class Item
     /**
      * Get typeId
      *
-     * @return integer 
+     * @return Type
      */
     public function getTypeId()
     {
@@ -213,7 +217,7 @@ class Item
     /**
      * Set currencyId
      *
-     * @param integer $currencyId
+     * @param Currency $currencyId
      * @return Item
      */
     public function setCurrencyId($currencyId)
@@ -226,7 +230,7 @@ class Item
     /**
      * Get currencyId
      *
-     * @return integer 
+     * @return Currency
      */
     public function getCurrencyId()
     {
@@ -282,7 +286,7 @@ class Item
     /**
      * Set barcodeId
      *
-     * @param integer $barcodeId
+     * @param Barcode $barcodeId
      * @return Item
      */
     public function setBarcodeId($barcodeId)
@@ -295,7 +299,7 @@ class Item
     /**
      * Get barcodeId
      *
-     * @return integer 
+     * @return Barcode
      */
     public function getBarcodeId()
     {

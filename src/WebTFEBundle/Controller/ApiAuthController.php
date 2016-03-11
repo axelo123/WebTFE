@@ -10,6 +10,7 @@ namespace WebTFEBundle\Controller;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use WebTFEBundle\Entity\User;
@@ -38,14 +39,14 @@ class ApiAuthController extends controller
 
     public function login_checkAction(Request $request) {
         // Retrieve username and password
-        $username = $request->get('username');
+        $name = $request->get('username');
         $password = $request->get('password');
 
         $password = sha1($password);
 
         // Verificate data in database
         $user = $this->getDoctrine()->getRepository('WebTFEBundle:User')->findOneBy(array(
-            'name' => $username,
+            'name' => $name,
             'password' => $password
         ));
 
@@ -59,14 +60,15 @@ class ApiAuthController extends controller
 
             $em->flush();
 
-            // Return service#user
-            $services_user =  $this->get('user.services');
-            return new JsonResponse($services_user->format_response($user));
+            $response=$this->render('WebTFEBundle:Stock:item-stock-save.html.twig',array());
+
+            $response->headers->setCookie(new Cookie('token', $user->getToken()));
+
+            return $response;
+
         }
 
-        $jsonResponse = new JsonResponse();
-        $jsonResponse->setStatusCode(403);
-        return $jsonResponse;
+        return $this->render('WebTFEBundle:Login:login-inscription.html.twig',array('erreur_login' =>'Username et/ou mot de passe invalide !'));
     }
 
     /**
@@ -84,28 +86,63 @@ class ApiAuthController extends controller
      */
     public function logoutAction(Request $request) {
         // Catch token from header
-        $token = $request->headers->get('token');
-        if($token)
+        $user=$this->getUser();
+        if($user)
         {
-            $user = $this->getDoctrine()->getRepository('WebTFEBundle:User')->findOneBy(array('token' => $token));
-            // Delete token in db
-            if($user) {
-                $token = null;
-                $user->setToken($token);
+            $token = null;
+            $user->setToken($token);
+            $this->container->get("security.context")->setToken(null);
 
-                $em = $this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();
 
-                $em->flush();
-                return new JsonResponse();
-            }
+            $em->flush();
         }
-        $jsonResponse = new JsonResponse();
-        $jsonResponse->setStatusCode(403);
-        return $jsonResponse;
+
+        return $this->redirect($this->generateUrl('webtfe_login_view'));
     }
 
+    public function addAction()
+    {
+        return $this->render('@WebTFE/Add/cstock-csave-citem.html.twig',array());
+    }
     public function loginAction(Request $request)
     {
-        return $this->render('WebTFEBundle:Login:login-inscription.html.twig');
+        return $this->render('WebTFEBundle:Login:login-inscription.html.twig',array());
+    }
+
+    public function affAction()
+    {
+        return $this->render('@WebTFE/Stock/item-stock-save.html.twig',array());
+    }
+
+    public function inscriptionAction(Request $request)
+    {
+        $name = $request->request->get("username");
+        $password = $request->get("password");
+        $confirm_password = $request->get("confirm_password");
+        if($name and $password and $confirm_password)
+        {
+            if($password == $confirm_password)
+            {
+                $password = sha1($password);
+                $em = $this->getDoctrine()->getEntityManager();
+                $user = new User();
+                $em->persist($user);
+                $user->setName($name);
+                $user->setPassword($password);
+                $user->createToken();
+                $em->flush();
+
+                $stocks=$this->getDoctrine()->getRepository('WebTFEBundle:Stock')->findAll();
+                return $this->render('WebTFEBundle:Stock:item-stock-save.html.twig',array('stocks'=>$stocks));
+            }else
+            {
+                return $this->render('WebTFEBundle:Login:login-inscription.html.twig',array('erreur_inscription' =>'mot de passe invalide'));
+            }
+        }else
+        {
+            return $this->render('WebTFEBundle:Login:login-inscription.html.twig',array('erreur_inscription' =>'Champ(s) imcomplet(s)'));
+        }
+
     }
 }

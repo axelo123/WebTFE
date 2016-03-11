@@ -21,12 +21,13 @@ class StockServices
         if($stock)
         {
             $user_services = $this->container->get('user.services');
+            $user_barcode = $this->container->get('barcode.services');
             return array(
                 "id"=>$stock->getId(),
                 "name"=>$stock->getName(),
                 "user_creator_id"=>$user_services->format_response($stock->getUserCreatorId()),
                 "is_delete"=>$stock->getIsDelete(),
-                "barcode_id"=>$stock->getBarcodeId()
+                "barcode_id"=>$user_barcode->format_response($stock->getBarcodeId())
             );
         }
         return array();
