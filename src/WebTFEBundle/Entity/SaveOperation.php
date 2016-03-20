@@ -25,7 +25,7 @@ class SaveOperation
     /**
      * @var Stock
      *
-     * @ORM\ManyToOne(targetEntity="WebTFEBundle\Entity\Stock",inversedBy="stockId")
+     * @ORM\ManyToOne(targetEntity="WebTFEBundle\Entity\Stock")
      * @ORM\JoinColumn(name="stockId", referencedColumnName="id")
      */
     private $stockId;
@@ -55,7 +55,7 @@ class SaveOperation
     /**
      * @var Item
      *
-     * @ORM\ManyToOne(targetEntity="WebTFEBundle\Entity\Item",inversedBy="articleId")
+     * @ORM\ManyToOne(targetEntity="WebTFEBundle\Entity\Item")
      * @ORM\JoinColumn(name="articleId", referencedColumnName="id")
      *
      */

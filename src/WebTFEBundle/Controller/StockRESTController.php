@@ -3,6 +3,7 @@
 namespace WebTFEBundle\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
+use WebTFEBundle\Entity\Item;
 use WebTFEBundle\Entity\Stock;
 use WebTFEBundle\Form\StockType;
 
@@ -83,22 +84,34 @@ class StockRESTController extends VoryxController
      */
     public function postAction(Request $request)
     {
-        $entity = new Stock();
-        $form = $this->createForm(new Stock(), $entity, array("method" => $request->getMethod()));
-        $this->removeExtraFields($request, $form);
-        //$form->handleRequest($request);
-        $form->submit($request->request->all());
+        $user_creator_id=$request->request->get('user_creator_id');
+        $barcode_id=$request->request->get('barcode_id');
+        $name=$request->request->get('name');
+        $is_delete=$request->request->get('is_delete');
+        //verification des 3 paramettre recuperer
+        if (  $user_creator_id and $barcode_id)
+        {
+            $repo_user=$this->getDoctrine()->getRepository('WebTFEBundle:User');
+            $user = $repo_user->find($user_creator_id);
+            $repo_barcode=$this->getDoctrine()->getRepository('WebTFEBundle:Barcode');
+            $barcode=$repo_barcode->find($barcode_id);
+            //verification des fs_email
+            if($user and $barcode)
+            {
+                $entity = new Stock();
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($entity);
+                $entity->setBarcodeId($barcode);
+                $entity->setUserCreatorId($user);
+                $entity->setName($name);
+                $entity->setIsDelete($is_delete);
+                $services_stock = $this->get('stock.services');
+                $em->flush();
+                $jsonResponse = new JsonResponse($services_stock->format_response($entity));
+                $jsonResponse->setStatusCode(201);
+                return $jsonResponse;
+            }
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
-
-            $services_stock =  $this->get('stock.services');
-
-            $jsonResponse = new JsonResponse($services_stock->format_response($entity));
-            $jsonResponse->setStatusCode(201);
-            return $jsonResponse;
         }
 
         $jsonResponse = new JsonResponse();

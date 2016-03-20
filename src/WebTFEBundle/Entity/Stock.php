@@ -40,7 +40,7 @@ class Stock
     /**
      * @var boolean
      *
-     * @ORM\Column(name="is_delete", type="boolean")
+     * @ORM\Column(name="is_delete", type="boolean",nullable=true)
      */
     private $isDelete;
 

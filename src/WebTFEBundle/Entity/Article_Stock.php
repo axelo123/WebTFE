@@ -24,7 +24,7 @@ class Article_Stock
     /**
      * @var Item
      *
-     * @ORM\ManyToOne(targetEntity="WebTFEBundle\Entity\Stock",inversedBy="articleId")
+     * @ORM\ManyToOne(targetEntity="WebTFEBundle\Entity\Stock")
      * @ORM\JoinColumn(name="articleId", referencedColumnName="id")
      */
     private $articleId;
@@ -32,7 +32,7 @@ class Article_Stock
     /**
      * @var Stock
      *
-     * @ORM\ManyToOne(targetEntity="WebTFEBundle\Entity\Item",inversedBy="stockId")
+     * @ORM\ManyToOne(targetEntity="WebTFEBundle\Entity\Item")
      * @ORM\JoinColumn(name="stockId", referencedColumnName="id")
      */
     private $stockId;

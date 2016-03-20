@@ -12,7 +12,7 @@
 {% block content %}
     <div class="container">
         <div class="row" style="text-align: center;">
-                <div class="col-sm-offset-0 col-sm-3"><h3><a href="{{ path('wetfe_add') }}">Ajout</a></h3></div>
+                <div class="col-sm-offset-0 col-sm-3"><h3><a href="{{ path('webtfe_add') }}">Ajout</a></h3></div>
                 <div class="col-sm-6"><h1>Gestion de stock</h1></div>
                 <div class="col-sm-3"><h3><a href="{{ path('webtfe_logout') }}">Déconnection</a></h3></div>
         </div>
@@ -21,7 +21,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Liste de stocks</div>
                     <div class="panel-body">
-                        {% include "WebTFEBundle:Stock:stock-form.html.twig" %}
+                        {% include "WebTFEBundle:Stock:stock-form.html.twig" with {'token':token} %}
                     </div>
                 </div>
             </div>
@@ -34,20 +34,117 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Liste d'articles</div>
                     <div class="panel-body">
-                        {% include "@WebTFE/Stock/item-form.html.twig" %}
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-offset-3 col-sm-6">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Liste de Save</div>
-                        <div class="panel-body">
-                            {% include "@WebTFE/Stock/save-form.html.twig" %}
-                        </div>
+                        {% include "@WebTFE/Stock/item-form.html.twig" with {'token':token} %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        ajax_stock();
+        ajax_item();
+        function ajax_stock(){
+            var echo_input = $('#echo').val();
+            $.ajax({
+                url : '{{ path('get_stocks') }}',
+                type : 'GET',
+                dataType : 'json',
+                headers: {"token": "{{token}}"},
+                success : function(result, statut){
+                    //alert(JSON.stringify(result));
+                    var res = '';
+                    for(var i = 0 ; i < result.length; i++)
+                    {
+                        res += '<label id="lab-id-"'+i+'>'+'id : '+'</label>';
+                        res += '<label id="id-"'+i+'>'+result[i].id+'</label><br>';
+
+                        res += '<label id="lab-name-"'+i+'>'+'name : '+'</label>';
+                        res += '<label id="name-"'+i+'>'+result[i].name+'</label><br>';
+
+                        res += '<label id="lab-user_creator_id.id-"'+i+'>'+'user_creator_id.id : '+'</label>';
+                        res += '<label id="user_creator_id.id-"'+i+'>'+result[i].user_creator_id.id+'</label><br>';
+
+                        res += '<label id="lab-user_creator_id.name-"'+i+'>'+'user_creator_id.name : '+'</label>';
+                        res += '<label id="user_creator_id.name-"'+i+'>'+result[i].user_creator_id.name+'</label><br>';
+
+                        res += '<label id="lab-is_delete-"'+i+'>'+'is_delete : '+'</label>';
+                        res += '<label id="is_delete-"'+i+'>'+result[i].is_delete+'</label><br>';
+
+                        res += '<label id="lab-barcode_id.id-"'+i+'>'+'barcode_id.id : '+'</label>';
+                        res += '<label id="barcode_id.id-"'+i+'>'+result[i].barcode_id.id+'</label><br>';
+
+                        res += '<label id="lab-barcode_id.barcode-"'+i+'>'+'barcode_id.barcode : '+'</label>';
+                        res += '<label id="barcode_id.barcode-"'+i+'>'+result[i].barcode_id.barcode+'</label><br>';
+
+                    }
+                    $('#ajax-stock').html(res);
+                }
+            });
+        }
+        function ajax_item(){
+            var echo_input = $('#echo').val();
+            $.ajax({
+                url : '{{ path('get_items') }}',
+                type : 'GET',
+                dataType : 'json',
+                headers: {"token": "{{token}}"},
+                success : function(result, statut){
+                    //alert(JSON.stringify(result));
+                    var res = '';
+                    for(var i = 0 ; i < result.length; i++)
+                    {
+                        res += '<label id="lab-id-"'+i+'>'+'id : '+'</label>';
+                        res += '<label id="id-"'+i+'>'+result[i].id+'</label><br>';
+
+                        res += '<label id="lab-name-"'+i+'>'+'name : '+'</label>';
+                        res += '<label id="name-"'+i+'>'+result[i].name+'</label><br>';
+
+                        res += '<label id="lab-type_id.id-"'+i+'>'+'type_id.id : '+'</label>';
+                        res += '<label id="type_id.id-"'+i+'>'+result[i].type_id.id+'</label><br>';
+
+                        res += '<label id="lab-type_id.name-"'+i+'>'+'type_id.name : '+'</label>';
+                        res += '<label id="type_id.name-"'+i+'>'+result[i].type_id.name+'</label><br>';
+
+                        res += '<label id="lab-type_id.expire_date.date-"'+i+'>'+'type_id.expire_date.date : '+'</label>';
+                        res += '<label id="type_id.expire_date.date-"'+i+'>'+result[i].type_id.expire_date.date+'</label><br>';
+
+                        res += '<label id="lab-quantity-"'+i+'>'+'quantity : '+'</label>';
+                        res += '<label id="quantity-"'+i+'>'+result[i].quantity+'</label><br>';
+
+                        res += '<label id="lab-is_delete-"'+i+'>'+'is_delete : '+'</label>';
+                        res += '<label id="is_delete-"'+i+'>'+result[i].is_delete+'</label><br>';
+
+                        res += '<label id="lab-count_update-"'+i+'>'+'count_update : '+'</label>';
+                        res += '<label id="count_update-"'+i+'>'+result[i].count_update+'</label><br>';
+
+                        res += '<label id="lab-currency_id.id-"'+i+'>'+'currency_id.id : '+'</label>';
+                        res += '<label id="currency_id.id-"'+i+'>'+result[i].currency_id.id+'</label><br>';
+
+                        res += '<label id="lab-currency_id.long_name-"'+i+'>'+'currency_id.long_name : '+'</label>';
+                        res += '<label id="currency_id.long_name-"'+i+'>'+result[i].currency_id.long_name+'</label><br>';
+
+                        res += '<label id="lab-currency_id.short_name-"'+i+'>'+'currency_id.short_name : '+'</label>';
+                        res += '<label id="currency_id.short_name-"'+i+'>'+result[i].currency_id.short_name+'</label><br>';
+
+                        res += '<label id="lab-currency_id.symbol-"'+i+'>'+'currency_id.symbol : '+'</label>';
+                        res += '<label id="currency_id.symbol-"'+i+'>'+result[i].currency_id.symbol+'</label><br>';
+
+                        res += '<label id="lab-price-"'+i+'>'+'price : '+'</label>';
+                        res += '<label id="price-"'+i+'>'+result[i].price+'</label><br>';
+
+                        res += '<label id="lab-description-"'+i+'>'+'description : '+'</label>';
+                        res += '<label id="description-"'+i+'>'+result[i].description+'</label><br>';
+
+                        res += '<label id="lab-barcode_id.id-"'+i+'>'+'barcode_id.id : '+'</label>';
+                        res += '<label id="barcode_id.id-"'+i+'>'+result[i].barcode_id.id+'</label><br>';
+
+                        res += '<label id="lab-barcode_id.barcode-"'+i+'>'+'barcode_id.barcode : '+'</label>';
+                        res += '<label id="barcode_id.barcode-"'+i+'>'+result[i].barcode_id.barcode+'</label><br>';
+
+                    }
+                    $('#ajax-item').html(res);
+                }
+            });
+        }
+    </script>
 {% endblock %}

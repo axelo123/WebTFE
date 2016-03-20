@@ -213,7 +213,6 @@
         <data-type>varchar(255)</data-type>
       </column>
       <column id="58" parent="7" name="is_delete">
-        <mandatory>1</mandatory>
         <data-type>tinyint(1)</data-type>
       </column>
       <column id="59" parent="7" name="userCreatorId">

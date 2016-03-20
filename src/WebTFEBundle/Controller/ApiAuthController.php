@@ -60,7 +60,7 @@ class ApiAuthController extends controller
 
             $em->flush();
 
-            $response=$this->render('WebTFEBundle:Stock:item-stock-save.html.twig',array());
+            $response=$this->render('WebTFEBundle:Add:cstock-csave-citem.html.twig',array('token'=>$user->getToken()));
 
             $response->headers->setCookie(new Cookie('token', $user->getToken()));
 
@@ -134,7 +134,7 @@ class ApiAuthController extends controller
                 $em->flush();
 
                 $stocks=$this->getDoctrine()->getRepository('WebTFEBundle:Stock')->findAll();
-                return $this->render('WebTFEBundle:Stock:item-stock-save.html.twig',array('stocks'=>$stocks));
+                return $this->render('WebTFEBundle:Login:login-inscription.html.twig',array('token'=>$user->getToken()));
             }else
             {
                 return $this->render('WebTFEBundle:Login:login-inscription.html.twig',array('erreur_inscription' =>'mot de passe invalide'));

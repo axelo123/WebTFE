@@ -80,22 +80,34 @@ class ItemRESTController extends VoryxController
      */
     public function postAction(Request $request)
     {
-        $entity = new Item();
-        $form = $this->createForm(new Item(), $entity, array("method" => $request->getMethod()));
-        $this->removeExtraFields($request, $form);
-        //$form->handleRequest($request);
-        $form->submit($request->request->all());
+        $type_id=$request->request->get('type_id');
+        $currency_id=$request->request->get('currency_id');
+        $barcode_id=$request->request->get('barcode_id');
+        //verification des 3 paramettre recuperer
+        if (  $type_id and $currency_id and $barcode_id)
+        {
+            $repo_type=$this->getDoctrine()->getRepository('WebTFEBundle:Type');
+            $type = $repo_type->find($type_id);
+            $repo_currency=$this->getDoctrine()->getRepository('WebTFEBundle:Currency');
+            $currency = $repo_currency->find($currency_id);
+            $repo_barcode=$this->getDoctrine()->getRepository('WebTFEBundle:Barcode');
+            $barcode=$repo_barcode->find($barcode_id);
+            //verification des fs_email
+            if($type and $currency and $barcode)
+            {
+                $entity = new Item();
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($entity);
+                $entity->setBarcodeId($barcode);
+                $entity->setTypeId($type);
+                $entity->setCurrencyId($currency);
+                $services_item = $this->get('item.services');
+                $em->flush();
+                $jsonResponse = new JsonResponse($services_item->format_response($entity));
+                $jsonResponse->setStatusCode(201);
+                return $jsonResponse;
+            }
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
-
-            $services_item =  $this->get('item.services');
-
-            $jsonResponse = new JsonResponse($services_item->format_response($entity));
-            $jsonResponse->setStatusCode(201);
-            return $jsonResponse;
         }
 
         $jsonResponse = new JsonResponse();

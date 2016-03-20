@@ -22,17 +22,17 @@ webtfe_inscription:
     methods:  POST
     defaults: { _controller: WebTFEBundle:ApiAuth:inscription }
 
-wetfe_stock:
+webtfe_stock:
     path:     /stock
     methods:  GET
     defaults: { _controller: WebTFEBundle:StockREST:stock }
 
-wetfe_add:
+webtfe_add:
     path:     /item
     methods:  GET
     defaults: { _controller: WebTFEBundle:ApiAuth:add }
 
-wetfe_aff:
-    path:     /item
+webtfe_aff:
+    path:     /aff
     methods:  GET
     defaults: { _controller: WebTFEBundle:ApiAuth:aff }

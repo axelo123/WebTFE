@@ -50,7 +50,7 @@ class UserRESTController extends VoryxController
      */
     public function cgetAction()
     {
-        $entities = $this->getDoctrine()->getRepository('ApiModComBundle:User')->findAll();
+        $entities = $this->getDoctrine()->getRepository('WebTFEBundle:User')->findAll();
         $services_user=  $this->get('user.services');
         if ($entities) {
             $results = [];
