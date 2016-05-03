@@ -14,7 +14,10 @@ StockHavenBundle\Entity\postalCode:
         region:
             type: string
             length: 255
+    manyToOne:
         countryId:
-            type: integer
-            column: country_id
+            targetEntity: country
+            joinColumn:
+                name: country_id
+                referencedColumnName: id
     lifecycleCallbacks: {  }

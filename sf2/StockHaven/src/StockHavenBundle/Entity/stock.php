@@ -138,4 +138,33 @@ class stock
     {
         return $this->barcodeId;
     }
+    /**
+     * @var \StockHavenBundle\Entity\notification
+     */
+    private $notification;
+
+
+    /**
+     * Set notification
+     *
+     * @param \StockHavenBundle\Entity\notification $notification
+     *
+     * @return stock
+     */
+    public function setNotification(\StockHavenBundle\Entity\notification $notification = null)
+    {
+        $this->notification = $notification;
+
+        return $this;
+    }
+
+    /**
+     * Get notification
+     *
+     * @return \StockHavenBundle\Entity\notification
+     */
+    public function getNotification()
+    {
+        return $this->notification;
+    }
 }

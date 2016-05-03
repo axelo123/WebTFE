@@ -16,12 +16,20 @@ StockHavenBundle\Entity\stock:
             type: boolean
             nullable: true
             column: is_delete
-        userCreatorId:
-            type: integer
-            nullable: true
-            column: user_creator_id
+    manyToOne:
+        notification:
+            targetEntity: notification
+            joinColumn:
+                name: stock_id
+                referencedColumnName: id
         barcodeId:
-            type: integer
-            nullable: true
-            column: barcode_id
+            targetEntity: barcode
+            joinColumn:
+                name: barcode_id
+                referencedColumnName: id
+        userCreatorId:
+            targetEntity: user
+            joinColumn:
+                name: user_creator_id
+                referencedColumnName: id
     lifecycleCallbacks: {  }

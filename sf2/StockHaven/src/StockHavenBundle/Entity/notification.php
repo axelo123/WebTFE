@@ -167,4 +167,60 @@ class notification
     {
         return $this->isView;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->stockId = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->userId = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add stockId
+     *
+     * @param \StockHavenBundle\Entity\stock $stockId
+     *
+     * @return notification
+     */
+    public function addStockId(\StockHavenBundle\Entity\stock $stockId)
+    {
+        $this->stockId[] = $stockId;
+
+        return $this;
+    }
+
+    /**
+     * Remove stockId
+     *
+     * @param \StockHavenBundle\Entity\stock $stockId
+     */
+    public function removeStockId(\StockHavenBundle\Entity\stock $stockId)
+    {
+        $this->stockId->removeElement($stockId);
+    }
+
+    /**
+     * Add userId
+     *
+     * @param \StockHavenBundle\Entity\user $userId
+     *
+     * @return notification
+     */
+    public function addUserId(\StockHavenBundle\Entity\user $userId)
+    {
+        $this->userId[] = $userId;
+
+        return $this;
+    }
+
+    /**
+     * Remove userId
+     *
+     * @param \StockHavenBundle\Entity\user $userId
+     */
+    public function removeUserId(\StockHavenBundle\Entity\user $userId)
+    {
+        $this->userId->removeElement($userId);
+    }
 }

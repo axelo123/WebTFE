@@ -22,6 +22,15 @@ class store
      */
     private $picture;
 
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    private $items;
+
+    public function __construct() {
+        $this->items = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
 
     /**
      * Get id

@@ -5,7 +5,7 @@ namespace StockHavenBundle\Entity;
 /**
  * item
  */
-class item
+class item 
 {
     /**
      * @var int
@@ -57,6 +57,14 @@ class item
      */
     private $barcodeId;
 
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    private $stores;
+
+    public function __construct() {
+        $this->stores = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -282,5 +290,39 @@ class item
     public function getBarcodeId()
     {
         return $this->barcodeId;
+    }
+
+    /**
+     * Add store
+     *
+     * @param \StockHavenBundle\Entity\store $store
+     *
+     * @return item
+     */
+    public function addStore(\StockHavenBundle\Entity\store $store)
+    {
+        $this->stores[] = $store;
+
+        return $this;
+    }
+
+    /**
+     * Remove store
+     *
+     * @param \StockHavenBundle\Entity\store $store
+     */
+    public function removeStore(\StockHavenBundle\Entity\store $store)
+    {
+        $this->stores->removeElement($store);
+    }
+
+    /**
+     * Get stores
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getStores()
+    {
+        return $this->stores;
     }
 }

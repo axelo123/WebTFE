@@ -12,10 +12,15 @@ StockHavenBundle\Entity\item_stock:
         quantity:
             type: integer
             nullable: true
+    manyToOne:
         itemId:
-            type: integer
-            column: item_id
+            targetEntity: item
+            joinColumn:
+                name: item_id
+                referencedColumnName: id
         stockId:
-            type: integer
-            column: stock_id
+            targetEntity: stock
+            joinColumn:
+                name: stock_id
+                referencedColumnName: id
     lifecycleCallbacks: {  }

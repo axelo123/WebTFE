@@ -9,9 +9,6 @@ StockHavenBundle\Entity\notification:
             generator:
                 strategy: AUTO
     fields:
-        userId:
-            type: integer
-            column: user_id
         isValided:
             type: boolean
             column: is_valided
@@ -19,11 +16,15 @@ StockHavenBundle\Entity\notification:
             type: datetimetz
             nullable: true
             column: create_date
-        stockId:
-            type: integer
-            column: stock_id
         isView:
             type: boolean
             nullable: true
             column: is_view
+    oneToMany:
+        stockId:
+            targetEntity: stock
+            mappedBy: notification
+        userId:
+            targetEntity: user
+            mappedBy: notification
     lifecycleCallbacks: {  }
