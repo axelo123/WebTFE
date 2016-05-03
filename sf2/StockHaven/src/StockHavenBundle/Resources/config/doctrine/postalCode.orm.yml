@@ -1,0 +1,20 @@
+StockHavenBundle\Entity\postalCode:
+    type: entity
+    table: null
+    repositoryClass: StockHavenBundle\Repository\postalCodeRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        code:
+            type: integer
+        region:
+            type: string
+            length: 255
+        countryId:
+            type: integer
+            column: country_id
+    lifecycleCallbacks: {  }

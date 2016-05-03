@@ -1,0 +1,21 @@
+StockHavenBundle\Entity\item_stock:
+    type: entity
+    table: null
+    repositoryClass: StockHavenBundle\Repository\item_stockRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        quantity:
+            type: integer
+            nullable: true
+        itemId:
+            type: integer
+            column: item_id
+        stockId:
+            type: integer
+            column: stock_id
+    lifecycleCallbacks: {  }

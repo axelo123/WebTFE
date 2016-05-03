@@ -1,0 +1,45 @@
+StockHavenBundle\Entity\item:
+    type: entity
+    table: null
+    repositoryClass: StockHavenBundle\Repository\itemRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 255
+        quantity:
+            type: integer
+            nullable: true
+        isDelete:
+            type: boolean
+            nullable: true
+            column: is_delete
+        countUpdate:
+            type: integer
+            nullable: true
+            column: count_update
+        price:
+            type: float
+            nullable: true
+        description:
+            type: string
+            length: 255
+            nullable: true
+        typeId:
+            type: integer
+            nullable: true
+            column: type_id
+        currencyId:
+            type: integer
+            nullable: true
+            column: currency_id
+        barcodeId:
+            type: integer
+            nullable: true
+            column: barcode_id
+    lifecycleCallbacks: {  }

@@ -1,0 +1,29 @@
+StockHavenBundle\Entity\notification:
+    type: entity
+    table: null
+    repositoryClass: StockHavenBundle\Repository\notificationRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        userId:
+            type: integer
+            column: user_id
+        isValided:
+            type: boolean
+            column: is_valided
+        createDate:
+            type: datetimetz
+            nullable: true
+            column: create_date
+        stockId:
+            type: integer
+            column: stock_id
+        isView:
+            type: boolean
+            nullable: true
+            column: is_view
+    lifecycleCallbacks: {  }
