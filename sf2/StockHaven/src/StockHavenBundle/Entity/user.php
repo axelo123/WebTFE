@@ -138,4 +138,13 @@ class user
     {
         return $this->notification;
     }
+
+    /**
+     * @return User
+     */
+    public function createToken()
+    {
+        $this->setToken(md5($this->name.$this->password.microtime()));
+        return $this;
+    }
 }
