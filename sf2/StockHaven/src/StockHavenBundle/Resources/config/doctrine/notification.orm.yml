@@ -20,11 +20,15 @@ StockHavenBundle\Entity\notification:
             type: boolean
             nullable: true
             column: is_view
-    oneToMany:
-        stockId:
-            targetEntity: stock
-            mappedBy: notification
+    manyToOne:
         userId:
             targetEntity: user
-            mappedBy: notification
+            joinColumn:
+                name: user_id
+                referencedColumnName: id
+        stockId:
+            targetEntity: stock
+            joinColumn:
+                name: stock_id
+                referencedColumnName: id
     lifecycleCallbacks: {  }

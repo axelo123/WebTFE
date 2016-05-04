@@ -17,11 +17,6 @@ StockHavenBundle\Entity\stock:
             nullable: true
             column: is_delete
     manyToOne:
-        notification:
-            targetEntity: notification
-            joinColumn:
-                name: stock_id
-                referencedColumnName: id
         barcodeId:
             targetEntity: barcode
             joinColumn:
