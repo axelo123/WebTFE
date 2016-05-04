@@ -167,4 +167,50 @@ class stock
     {
         return $this->notification;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $users;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add user
+     *
+     * @param \StockHavenBundle\Entity\user $user
+     *
+     * @return stock
+     */
+    public function addUser(\StockHavenBundle\Entity\user $user)
+    {
+        $this->users[] = $user;
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param \StockHavenBundle\Entity\user $user
+     */
+    public function removeUser(\StockHavenBundle\Entity\user $user)
+    {
+        $this->users->removeElement($user);
+    }
+
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
 }

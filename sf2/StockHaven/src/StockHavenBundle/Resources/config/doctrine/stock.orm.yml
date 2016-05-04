@@ -27,4 +27,15 @@ StockHavenBundle\Entity\stock:
             joinColumn:
                 name: user_creator_id
                 referencedColumnName: id
+    manyToMany:
+        users:
+            targetEntity: user
+            joinTable:
+                name: users_stocks
+                joinColumns:
+                    stock_id:
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    user_id:
+                        referencedColumnName: id
     lifecycleCallbacks: {  }
