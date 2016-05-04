@@ -22,6 +22,6 @@ StockHavenBundle\Entity\user:
             notification:
                 targetEntity: notification
                 joinColumn:
-                    name: user_id
+                    name: id
                     referencedColumnName: id
     lifecycleCallbacks: {  }
