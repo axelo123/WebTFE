@@ -1,3 +1,3 @@
 stock_haven_homepage:
-    path:     /
+    path:     /hello/{name}
     defaults: { _controller: StockHavenBundle:Default:index }

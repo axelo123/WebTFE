@@ -3,6 +3,8 @@
 namespace StockHavenBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class AuthConnectController extends Controller
 {
@@ -18,7 +20,7 @@ class AuthConnectController extends Controller
         //return new JsonResponse(array('accountName' => $password,'fsUserId'=>$username));
 
         // check that in the db
-        $user = $this->getDoctrine()->getRepository('ApiModComBundle:User')->findOneBy(array(
+        $user = $this->getDoctrine()->getRepository('StockHavenBundle:user')->findOneBy(array(
             'name' => $username,
             'password' => $password,
         ));
